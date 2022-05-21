@@ -1,7 +1,7 @@
 {
   "name": "@logustra/vinscroll",
   "version": "0.0.1",
-  "description": "An Infinite scroll component for vue 2-3",
+  "description": "A minimalist infinite scroll component for vue 2-3",
   "keywords": [
     "vue",
     "vue3",

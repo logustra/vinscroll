@@ -3,7 +3,7 @@
 [![Code Style](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 [![Commitizen](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli)
 
-> An Infinite scroll component for vue 2-3
+> A minimalist infinite scroll component for vue 2-3
 
 ## Cheer me on
 If you like my works, you can cheer me on here 😆
