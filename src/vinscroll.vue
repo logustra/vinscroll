@@ -1,4 +1,5 @@
 <script lang="ts">
+import type { PropType } from 'vue-demi'
 import {
   computed,
   defineComponent,
@@ -6,27 +7,20 @@ import {
   onMounted,
   onUnmounted,
   toRefs,
+  watch,
 } from 'vue-demi'
 
 export default defineComponent({
   name: 'Vinscroll',
   props: {
-    tag: {
-      type: String,
+    element: {
+      type: HTMLElement as PropType<HTMLElement | null>,
       required: false,
-      default: 'div',
-    },
-    isElement: {
-      type: Boolean,
-      required: false,
-      default: false,
+      default: null,
     },
   },
   setup(props, { emit, slots }) {
-    const {
-      tag,
-      isElement,
-    } = toRefs(props)
+    const { element } = toRefs(props)
 
     /**
      * DESC:
@@ -34,30 +28,32 @@ export default defineComponent({
      */
     const LOAD_MORE = 'load:more'
 
-    const element = computed(() => {
-      let result = document.documentElement
-
+    const currentElement = computed(() => {
       /**
        * DESC:
        * use this element when the infinite scoll
        * is in the element
        */
-      if (isElement.value)
-        result = (slots.default && slots.default()[0].el) as HTMLElement
-
-      return result
+      return (
+        element.value
+          ? element.value
+          : document.documentElement
+      )
     })
 
     function onScroll() {
-      if (element.value && element.value.scrollTop > 0) {
+      if (
+        currentElement.value
+        && currentElement.value.scrollTop > 0
+      ) {
         /**
          * DESC:
          * calculations for how much the document
          * has been scrolled from the top
          */
         const scrollY = (
-          isElement.value
-            ? element.value.scrollTop + element.value.clientHeight
+          element.value
+            ? currentElement.value.scrollTop + currentElement.value.clientHeight
             : window.pageYOffset + window.innerHeight
         )
 
@@ -78,14 +74,17 @@ export default defineComponent({
          * height of an element's content
          * including content not visible on the screen due to overflow
          */
-        const scrollHeight = element.value.scrollHeight
+        const scrollHeight = currentElement.value.scrollHeight
 
         /**
          * DESC:
          * set to true when the scroll has arrived at the bottom,
          * both on desktop or mobile.
          */
-        const isArrivedBottom = downwardScrollY === scrollHeight || upwardScrollY === scrollHeight
+        const isArrivedBottom = (
+          downwardScrollY === scrollHeight
+          || upwardScrollY === scrollHeight
+        )
 
         /**
          * DESC:
@@ -95,11 +94,22 @@ export default defineComponent({
       }
     }
 
-    onMounted(() => {
-      if (isElement.value)
-        element.value && element.value.addEventListener('scroll', onScroll)
+    watch(
+      () => currentElement.value,
+      () => {
+        if (currentElement.value) {
+          currentElement.value.removeEventListener('scroll', onScroll)
+          currentElement.value.addEventListener('scroll', onScroll)
+        }
+        else {
+          window.removeEventListener('scroll', onScroll)
+          window.addEventListener('scroll', onScroll)
+        }
+      },
+    )
 
-      else
+    onMounted(() => {
+      if (!element.value)
         window.addEventListener('scroll', onScroll)
     })
 
@@ -108,8 +118,8 @@ export default defineComponent({
        * DESC:
        * remove event listener to free up memory usage
        */
-      if (isElement.value)
-        element.value && element.value.removeEventListener('scroll', onScroll)
+      if (element.value)
+        currentElement.value.removeEventListener('scroll', onScroll)
 
       else
         window.removeEventListener('scroll', onScroll)
@@ -121,7 +131,7 @@ export default defineComponent({
      * passing props as null
      */
     return () => h(
-      tag.value,
+      'div',
       null,
       slots.default && slots.default(),
     )

@@ -1,10 +1,13 @@
 <template>
   <div>
     <Vinscroll
-      is-element
+      :element="elScroll"
       @load:more="onLoadMore"
     >
-      <div style="height: 200px; border: 1px solid black; overflow: auto;">
+      <div
+        ref="elScroll"
+        style="height: 200px; border: 1px solid black; overflow: auto;"
+      >
         <div
           v-for="item in items"
           :key="item"
@@ -42,6 +45,7 @@ export default defineComponent({
     Vinscroll,
   },
   setup() {
+    const elScroll = ref(null)
     const items = ref([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
 
     function onLoadMore() {
@@ -50,6 +54,7 @@ export default defineComponent({
     }
 
     return {
+      elScroll,
       items,
       onLoadMore,
     }
