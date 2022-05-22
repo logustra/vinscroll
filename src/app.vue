@@ -15,6 +15,13 @@
         >
           {{ item }}
         </div>
+
+        <div
+          v-if="isLoading"
+          style="text-align: center;"
+        >
+          loading...
+        </div>
       </div>
     </Vinscroll>
 
@@ -27,6 +34,13 @@
         style="padding: 5px; margin: 5px; background-color: green;"
       >
         {{ item }}
+      </div>
+
+      <div
+        v-if="isLoading"
+        style="text-align: center;"
+      >
+        loading...
       </div>
     </Vinscroll>
   </div>
@@ -46,15 +60,25 @@ export default defineComponent({
   },
   setup() {
     const elScroll = ref(null)
+    const isLoading = ref(false)
     const items = ref([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
 
-    function onLoadMore() {
+    function timeout(milliseconds: number) {
+      return new Promise(resolve => setTimeout(resolve, milliseconds))
+    }
+
+    async function onLoadMore() {
+      isLoading.value = true
+      await timeout(1000)
+      isLoading.value = false
+
       const length = items.value.length + 1
       items.value.push(...Array.from({ length: 5 }, (_, index) => length + index))
     }
 
     return {
       elScroll,
+      isLoading,
       items,
       onLoadMore,
     }

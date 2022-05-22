@@ -1,4 +1,4 @@
 
-import HelloWorld from './helloWorld.vue'
-export default HelloWorld
-export * from './helloWorld.vue'
+import Vinscroll from './vinscroll.vue'
+export default Vinscroll
+export * from './vinscroll.vue'

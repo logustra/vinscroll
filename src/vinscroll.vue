@@ -94,23 +94,26 @@ export default defineComponent({
       }
     }
 
+    function onAddEventListener() {
+      if (element.value) {
+        currentElement.value.removeEventListener('scroll', onScroll)
+        currentElement.value.addEventListener('scroll', onScroll)
+      }
+      else {
+        window.removeEventListener('scroll', onScroll)
+        window.addEventListener('scroll', onScroll)
+      }
+    }
+
     watch(
       () => currentElement.value,
       () => {
-        if (currentElement.value) {
-          currentElement.value.removeEventListener('scroll', onScroll)
-          currentElement.value.addEventListener('scroll', onScroll)
-        }
-        else {
-          window.removeEventListener('scroll', onScroll)
-          window.addEventListener('scroll', onScroll)
-        }
+        onAddEventListener()
       },
     )
 
     onMounted(() => {
-      if (!element.value)
-        window.addEventListener('scroll', onScroll)
+      onAddEventListener()
     })
 
     onUnmounted(() => {
