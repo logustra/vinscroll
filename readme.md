@@ -95,7 +95,7 @@ export default {
 }
 </script>
 ```
-[Demo →](https://codesandbox.io/s/vibrant-wood-d6fz41?file=/src/components/basicUsage.vue)
+[Demo →](https://stackblitz.com/edit/vitejs-vite-x1g4ac?file=src%2Fcomponents%2FbasicUsage.vue)
 
 ### In Element
 ```html
@@ -139,7 +139,7 @@ export default {
 }
 </script>
 ```
-[Demo →](https://codesandbox.io/s/vibrant-wood-d6fz41?file=/src/components/inElement.vue)
+[Demo →](https://stackblitz.com/edit/vitejs-vite-x1g4ac?file=src%2Fcomponents%2FinElement.vue)
 
 ## API
 ### Props
